@@ -1,1 +1,1 @@
-Park Seock Min's Project
+Seock Min Park's Project
