@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.androidtown.memo">
+    package="com.bignerdranch.android.memo">
 
     <application
         android:allowBackup="true"
@@ -10,15 +10,42 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".Memoes.MemoListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name=".Memoes.MemoActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".Categories.MemoListCategoriActivity"
+            android:label="카테고리 리스트">
+
+
+
+        </activity>
+        <activity
+            android:name=".Categories.MemoCategoriActivity"
+            android:label="카테고리">
+
+        </activity>
+
+        <activity
+            android:name=".Categories.MemokindCategoriActivity"
+            android:label="카테고리 분류">
+        </activity>
+
+        <activity android:name=".Categories.MemoViewActivity"
+                  android:label="리스트뷰 테스트">
+
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package org.androidtown.memo;
+package com.bignerdranch.android.memo;
 
 import org.junit.Test;
 
