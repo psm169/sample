@@ -76,23 +76,13 @@ public class MemoCategoriFragment extends Fragment{
             @Override
             public void onClick(View v)
             {
-                if(isOldCategori)
-                {
-                    String categoriTitleTemp = mEditTitle.getText().toString();
-                    long categoriIdTemp = getActivity().getIntent().getLongExtra("categori_id",0);
-                    mCategoriData = new CategoriData();
-                    mCategoriData.setId(categoriIdTemp);
-                    mCategoriData.setCategoriTitle(categoriTitleTemp);
-                    dbHelper.updateCategori(mCategoriData);
-                }
-                else {
+
                     String categoriTitleTemp = mEditTitle.getText().toString();
                     int a = dbHelper.insertCategoriData(categoriTitleTemp);
-                    if (a == 0) {
+                    if (a == 0)
                         Toast.makeText(getActivity(), "중복된 카테고리입니다", Toast.LENGTH_SHORT).show();
-                    }
                     getActivity().finish();
-                }
+
             }
         });
         mSaveButton.setEnabled(true);

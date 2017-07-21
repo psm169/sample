@@ -49,8 +49,7 @@ public class MemoListCategoriFragment extends ListFragment {
         dbHelper = new RunDatabaseHelper(getActivity(),"categoridata",null,1);
         mArrayCategoriData = new ArrayList<>();
         mcategoriAdapter = new MemoCategoriAdapter(mArrayCategoriData);
-
-
+        dbHelper.insertCategoriData("없음");
 
         setListAdapter(mcategoriAdapter);
     }
@@ -64,8 +63,17 @@ public class MemoListCategoriFragment extends ListFragment {
 
         mArrayCategoriData.clear();
         ArrayList<CategoriData> test = dbHelper.getResultCategoriList();
+        String noCategori = "없음";
+        for (CategoriData temp : test)
+        {
+            if(temp.getCategoriTitle().equals(noCategori))
+                mArrayCategoriData.add(temp);
+        }
+
         for (CategoriData str : test) {
-            mArrayCategoriData.add(str);
+
+            if(!str.getCategoriTitle().equals(noCategori))
+                mArrayCategoriData.add(str);
         }
 
         mcategoriAdapter.notifyDataSetChanged();
@@ -101,16 +109,16 @@ public class MemoListCategoriFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View view , final int position, long id)
     {
-        View convertView = getActivity().getLayoutInflater().inflate(R.layout.fragment_memo_list_categori,null);
+ //       View convertView = getActivity().getLayoutInflater().inflate(R.layout.fragment_memo_list_categori,null);
 
-        CategoriData categoriData = mArrayCategoriData.get(position);
-        Intent i = new Intent(getActivity(),MemokindCategoriActivity.class);
+ //       CategoriData categoriData = mArrayCategoriData.get(position);
+ //       Intent i = new Intent(getActivity(),MemokindCategoriActivity.class);
   //      long testtetet = categoriData.getId();
  //      Log.d("i Input" + categoriData.getId(),"good");
-        i.putExtra("Categori_id_info",categoriData.getId());
+ //       i.putExtra("Categori_id_info",categoriData.getId());
 
 
-        startActivity(i);
+ //       startActivity(i);
 
 
 
@@ -144,15 +152,31 @@ public class MemoListCategoriFragment extends ListFragment {
             TextView titleTextView =(TextView)convertView.findViewById(R.id.memo_menu_categori);
             titleTextView.setText(categoriSetTitle.getCategoriTitle());
 
+
+
+
             LinearLayout categoryItem = (LinearLayout) convertView.findViewById(R.id.category_item);
             categoryItem.setTag(position);
             categoryItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("suckmin", "work");
+
+                    CategoriData categoriData = mArrayCategoriData.get((int)v.getTag());
+                    Intent i = new Intent(getActivity(),MemokindCategoriActivity.class);
+
+                    i.putExtra("Categori_id_info",categoriData.getId());
+                    i.putExtra("Categori_title_info",categoriData.getCategoriTitle());
+
                     Toast.makeText(getActivity(), v.getTag().toString(), Toast.LENGTH_SHORT).show();
+
+                    startActivity(i);
+
                 }
             });
+
+ //           if(dbHelper.findId("없음") == mCategoriData.getId())
+
+
 
 
 

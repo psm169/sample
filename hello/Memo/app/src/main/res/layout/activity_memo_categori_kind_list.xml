@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/fragmentContainer5"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:id="@+id/fragmentContainer5">
+              android:orientation="vertical">
 
+    <fragment
+        android:id="@+id/fragment"
+
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        tools:layout="@layout/fragment_memo_list_kind_setting_categori"
+        android:name="com.bignerdranch.android.memo.Categories.MemoKindCategoriSettingFragment"
+        >
+
+    </fragment>
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_memo_list_kind_categori"
+        android:name="com.bignerdranch.android.memo.Categories.MemokindCategoriFragment"
+        >
+
+    </fragment>
 </LinearLayout>

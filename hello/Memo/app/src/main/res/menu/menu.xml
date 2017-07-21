@@ -8,6 +8,12 @@
         android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_add"
         android:title="카테고리"
-        app:showAsAction="always" />
+   />
+    <item
+        android:id="@+id/memo_getdata_server"
+        android:orderInCategory="100"
+        android:title="불러오기"
+ />
+
 
 </menu>

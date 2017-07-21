@@ -109,48 +109,11 @@ public class MemoFragment extends Fragment {
             mTextField.setText(mMemoData.getMemoText());
             mSettingDateButton.setText(String.valueOf(mMemoData.getMemoDate()));
             mCategoriMemoSpinner.setSelection((int)mMemoData.getMemoId()); //작동 x 덮어씌워질 내용
-
         }
 
 
-        mTitleField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //내비둬
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //     if (mMemo != null && mMemo.getTitle() != null)
-                mMemoData.setMemoTitle(s.toString());
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-//에딧이라 필요없음
-        //     if (mMemo.getText() != null)
-
-        mTextField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //     if (mMemo != null && mMemo.getText() != null)
-                mMemoData.setMemoText(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         //달력
         updateDate();
@@ -160,6 +123,7 @@ public class MemoFragment extends Fragment {
                 //     {
                 //         mMemoData = new MemoData();
                 //     }
+
                 FragmentManager fm = getActivity().getSupportFragmentManager();
 
 
@@ -247,14 +211,14 @@ public class MemoFragment extends Fragment {
 
                         memoDateTemp = now;
                     }
-
+                  //mMemoData.setMemoTitle(memoTitleTemp);
                     mMemoData.setMemoText(memoTextTemp);
-                    mMemoData.setMemoTitle(memoTitleTemp);
                     mMemoData.setMemoDate(memoDateTemp);
 
+/////////////////////////저장해줄때
 
 
-
+                    ////////////////제목이 빈값일때 새 메모 + @ 로 저장
                     if(memoTitleTemp.equals(compareTitleNull) )
                     {
                         int i = 0;
@@ -269,23 +233,20 @@ public class MemoFragment extends Fragment {
                         }
                         long memoCategoriIdTemp = dbhelper.getCategoriIdnum(memoSpinnerTitleTemp);
 
-                    //    dbhelper.insert(memoTitleTemp, memoDateTemp, memoTextTemp,memoCategoriIdTemp);
+                        mMemoData.setMemoTitle(memoTitleTemp);
                         mMemoData.setMemoCategoriInfo(memoCategoriIdTemp);
                         dbhelper.insertMemoData(mMemoData);
                     }
                     else{
+                        //String text = mTextField.getText().toString();
+                        //long date = Long.parseLong(mSettingDateButton.getTag().toString());
+
                         String title = mTitleField.getText().toString();
-       //                 String text = mTextField.getText().toString();
-       //                 long date = Long.parseLong(mSettingDateButton.getTag().toString());
+                        mMemoData.setMemoTitle(title);
                         long memoCategoriIdTemp = dbhelper.getCategoriIdnum(memoSpinnerTitleTemp);
                         mMemoData.setMemoCategoriInfo(memoCategoriIdTemp);
                         dbhelper.insertMemoData(mMemoData);
                     }
-
-                 //   getActivity().finish();
-                    //    }
-                    //     else
-                    //         dbhelper.insert("1","1"," test");
                 }
                 getActivity().finish();
 
@@ -319,14 +280,18 @@ public class MemoFragment extends Fragment {
 
 
         Spinner mCategoriMemoSpinner = (Spinner)v.findViewById(R.id.memo_select_categori_spinner);
-        spinnerCombobox = dbhelper.getSpinnerList(); //spinnerCombobox = ArrayList<String> ;
+        spinnerCombobox = dbhelper.getSpinnerList(); //spinnerCombobox = ArrayList<CategoriData> ;
 //        mCategoriMemoSpinner.setPrompt("카테고리를 고르세요");
         ArrayList<String> spinnerText = new ArrayList<>();
 
+        String spinnerTilteTemp = "없음";
+        ArrayList<CategoriData> tempCate = new ArrayList<>();
         for(CategoriData str : spinnerCombobox)
         {
-            spinnerText.add(str.getCategoriTitle());
+                tempCate.add(str);
+                spinnerText.add(str.getCategoriTitle());
         }
+
 
 
         //categorilist에 있는 항목들을 긁어옴
@@ -405,8 +370,15 @@ public class MemoFragment extends Fragment {
         if (mMemoData == null)
             mMemoData = new MemoData();
 
+
+
         Date displayDate = new Date();
-        displayDate.setTime(mMemoData.getMemoDate());
+        if(isOldMemo)
+        {
+            displayDate.setTime(mMemoData.getMemoDate());
+        }
+        else
+            displayDate.setTime(Calendar.getInstance().getTimeInMillis());
         mSettingDateButton.setText(displayDate.toString());
         mSettingDateButton.setTag(mMemoData.getMemoDate());
     }

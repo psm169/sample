@@ -130,6 +130,7 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
     public ArrayList<MemoData> getResultList() {
         ArrayList<MemoData> memodata = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -174,7 +175,6 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
 
       //  Cursor cursor =
 
-
         if(id > 0) {
             Cursor cursor = db.rawQuery("SELECT * FROM memodata where memo_id = " + id, null);
 
@@ -212,7 +212,6 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
                     rtValue = true;
             }
         }
-
         return rtValue;
     }
 
@@ -232,10 +231,18 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
         else
             return " ";
 
-
     }
 
-//////////////////////////카테고리 database
+    public void deleteCategori(long id)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+ //       db.execSQL("delete from memodata from categoridata inner join memodata on categoridata.categori_id = memodata.memo_categori_info " +
+ //                                           " where categoridata.categori_id = " + id);
+        db.execSQL("delete from memodata where memo_categori_info = " +id);
+        db.execSQL("delete from categoridata where categori_id = "+id);
+
+    }
+    //////////////////////////카테고리 database
     public int insertCategoriData(String title)
     {
         SQLiteDatabase db = getWritableDatabase();
@@ -250,7 +257,6 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
         else
             return 0;
 
-
     //    db.execSQL("insert into memodata values(null, '" + title + "' , '" + date + "', '" + text + "')");
     }
 
@@ -258,8 +264,7 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
     {
         ArrayList<CategoriData> categoridatas = new ArrayList<CategoriData>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from categoridata order by categori_title desc ",null);
-
+        Cursor cursor = db.rawQuery("select * from categoridata order by categori_title desc",null);
 
         while(cursor.moveToNext())
         {
@@ -282,6 +287,7 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
         while(cursor.moveToNext())
         {
             mMemoData = new MemoData();
+            mMemoData.setMemoId(cursor.getLong(cursor.getColumnIndex("memo_id")));
             mMemoData.setMemoTitle(cursor.getString(cursor.getColumnIndex("memo_title")));
             mMemoData.setMemoText(cursor.getString(cursor.getColumnIndex("memo_text")));
             mMemoData.setMemoDate(cursor.getLong(cursor.getColumnIndex("start_date")));
@@ -311,19 +317,33 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
         ArrayList<CategoriData> getSL = new ArrayList< >();
         CategoriData categoridata ;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from categoridata ",null);
+        String aaa = "없음";
+        Cursor cursor = db.rawQuery("select * from categoridata order by categori_title desc ",null);
         while (cursor.moveToNext())
         {
-            categoridata = new CategoriData();
-            categoridata.setId(cursor.getLong(cursor.getColumnIndex("categori_id")));
-            categoridata.setCategoriTitle(cursor.getString(cursor.getColumnIndex("categori_title")));
-         //   getSL.add(cursor.getString(cursor.getColumnIndex("categori_title")));
-            getSL.add(categoridata);
+            if(aaa.equals(cursor.getString(cursor.getColumnIndex("categori_title"))))
+            {
+                categoridata = new CategoriData();
+                categoridata.setId(cursor.getLong(cursor.getColumnIndex("categori_id")));
+                categoridata.setCategoriTitle(cursor.getString(cursor.getColumnIndex("categori_title")));
+                //   getSL.add(cursor.getString(cursor.getColumnIndex("categori_title")));
+                getSL.add(categoridata);
+            }
+
         }
-
+        cursor = db.rawQuery("select * from categoridata order by categori_title desc ",null);
+        while(cursor.moveToNext())
+        {
+            if(!aaa.equals(cursor.getString(cursor.getColumnIndex("categori_title"))))
+            {
+                categoridata = new CategoriData();
+                categoridata.setId(cursor.getLong(cursor.getColumnIndex("categori_id")));
+                categoridata.setCategoriTitle(cursor.getString(cursor.getColumnIndex("categori_title")));
+                //   getSL.add(cursor.getString(cursor.getColumnIndex("categori_title")));
+                getSL.add(categoridata);
+            }
+        }
         return getSL;
-
-
     }
 
     public void updateCategori(CategoriData datas)
@@ -335,8 +355,24 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteCategori(long id)
+    //카테고리항목을 지웟을때 기존에있는 문서들은 없음 으로 이동
+    public long findId(String title)
     {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from categoridata where categori_title = '" + title + "'" , null);
 
+        cursor.moveToNext();
+        long temp = cursor.getLong(cursor.getColumnIndex("categori_id"));
+        return temp;
+    }
+    public void deleteCategoriUpdate(long oldId)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        long id = findId("없음");
+        if(oldId != id) {
+            db.execSQL("update memodata set memo_categori_info = " + id + " where memo_categori_info = " + oldId);
+
+            db.execSQL("delete from categoridata where categori_id = " + oldId);
+        }
     }
 }

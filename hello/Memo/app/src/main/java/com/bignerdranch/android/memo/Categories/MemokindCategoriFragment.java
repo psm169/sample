@@ -3,14 +3,18 @@ package com.bignerdranch.android.memo.Categories;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bignerdranch.android.memo.Data.CategoriData;
 import com.bignerdranch.android.memo.Data.MemoData;
 import com.bignerdranch.android.memo.Database.RunDatabaseHelper;
+import com.bignerdranch.android.memo.Memoes.MemoActivity;
 import com.bignerdranch.android.memo.R;
 
 import java.lang.reflect.Array;
@@ -46,7 +50,6 @@ public class MemokindCategoriFragment extends ListFragment {
         setListAdapter(memoAdapter);
 
     }
-
     @Override
     public void onResume()
     {
@@ -62,6 +65,14 @@ public class MemokindCategoriFragment extends ListFragment {
         memoAdapter.notifyDataSetChanged();
 
     }
+
+    @Override
+    public void onListItemClick(ListView l , View view, int position, long id)
+    {
+
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCoe, Intent data){
         ((MemokindCategoriFragment.MemoKindAdapter)getListAdapter()).notifyDataSetChanged();;
@@ -97,6 +108,27 @@ public class MemokindCategoriFragment extends ListFragment {
 
             TextView setKindCategori = (TextView) convertView.findViewById(R.id.list_kind_categori_info);
             setKindCategori.setText(dbHelper.findCategoriTitle(selectedCategoriId));
+
+            RelativeLayout kindListRelative = (RelativeLayout)convertView.findViewById(R.id.list_kind_categori_layout_button);
+            kindListRelative.setTag(position);
+            kindListRelative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    MemoData memoData = mMemoDataArrayList.get((int)v.getTag());
+                    Intent i = new Intent(getActivity(), MemoActivity.class);
+                    Log.d("asd", String.valueOf(memoData.getMemoId()) );
+                    i.putExtra("memo_id",memoData.getMemoId());
+                    i.putExtra("newmemo", true);
+
+                    startActivity(i);
+
+                }
+            });
+
+
+
 
             return convertView;
 

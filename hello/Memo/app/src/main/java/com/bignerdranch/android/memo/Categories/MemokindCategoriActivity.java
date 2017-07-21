@@ -22,6 +22,7 @@ public class MemokindCategoriActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer5);
 
+
         if(fragment == null)
         {
             fragment = new MemokindCategoriFragment();

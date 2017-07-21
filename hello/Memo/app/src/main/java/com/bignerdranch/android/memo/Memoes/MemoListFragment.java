@@ -33,6 +33,8 @@ public class MemoListFragment extends ListFragment {
     SQLiteDatabase db;
     Cursor cursor;
 
+    public String urlRealbyteSeockmin = "http://realbyte.co.kr/seockmin/notepadtext.json";
+
 
     private static final String TAG = "MemoListFragment";
     private ArrayList<Memo> mMemos;
@@ -105,7 +107,15 @@ public class MemoListFragment extends ListFragment {
                 Intent i = new Intent(getActivity(), MemoListCategoriActivity.class);
                 i.putExtra("movecategori",true);
                 startActivity(i);
+         //       return true;
+
+            case R.id.memo_getdata_server:
+
+
+
                 return true;
+
+
             default:
                 return super.onOptionsItemSelected(menu);
         }
